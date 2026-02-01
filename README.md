@@ -1,5 +1,5 @@
 # douban
 
-The PLAY button for douban movie & friends.
+The PLAY button for douban.
 
 ![screenshot](screenshot.png)

@@ -1,15 +1,44 @@
-function addPlayButton() {
+function makeAnchor() {
+  const anchor = document.createElement('a');
+  anchor.innerHTML = '&#9658;';
+  anchor.setAttribute('style', 'margin-left: 10px;');
+  anchor.target = '_blank';
+  anchor.rel = 'noreferrer noopener';
+  return anchor;
+}
+
+function addPlayMovieButton() {
   const movieName = window.document.title.slice(0, -5);
-
-  const douban = document.createElement('a');
-  douban.innerHTML = '&#9658;';
-  douban.setAttribute('style', 'margin-left: 10px;');
-  douban.href = 'https://www.iyf.tv/search/' + movieName;
-  douban.target = '_blank';
-  douban.rel = 'noreferrer noopener';
-
   const year = document.querySelector('#content .year');
-  year.parentNode.insertBefore(douban, year.nextSibling);
+  if (!year) return;
+
+  const anchor = makeAnchor();
+  anchor.href = 'https://www.iyf.tv/search/' + movieName;
+
+  year.after(anchor);
+}
+
+
+function addPlayMusicButton() {
+  const albumName = document.querySelector('#wrapper h1 span');
+  if (!albumName) return;
+
+  const anchor = makeAnchor();
+  anchor.href = 'https://open.spotify.com/search/' + albumName.textContent + '/albums';
+
+  albumName.after(anchor);
+}
+
+function addCopyBookHotkey() {
+  const bookName = document.querySelector('#wrapper h1 span');
+  if (!bookName) return;
+
+  // bind a hotkey to copy the book name
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'c') {
+      navigator.clipboard.writeText(bookName.textContent);
+    }
+  });
 }
 
 function addImdbLink() {
@@ -37,5 +66,11 @@ function addImdbLink() {
   }
 }
 
-addPlayButton();
-addImdbLink();
+if (window.location.host === 'movie.douban.com') {
+  addPlayMovieButton();
+  addImdbLink();
+} else if (window.location.host === 'music.douban.com') {
+  addPlayMusicButton();
+} else if (window.location.host === 'book.douban.com') {
+  addCopyBookHotkey();
+}
